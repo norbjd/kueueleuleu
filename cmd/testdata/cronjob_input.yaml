@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: dummy
+spec:
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          initContainers:
+            - name: prepare
+              image: alpine
+              command: ["echo", "hello"]
+          containers:
+            - name: step1
+              image: alpine
+              command: ["echo", "step1"]
+            - name: step2
+              image: alpine
+              command: ["echo", "step2"]
+            - name: step3
+              image: alpine
+              command: ["echo", "step3"]
+          restartPolicy: Never
+  schedule: "0 0 * * *"

@@ -1,0 +1,19 @@
+run:
+  build-tags:
+    - e2e
+  tests: true
+
+linters:
+  enable-all: true
+  disable:
+    - depguard # disable until a new golangci-lint version is released with https://github.com/golangci/golangci-lint/pull/4207
+    - exhaustivestruct
+    - exhaustruct
+    - ireturn # I don't really understand this rule
+
+issues:
+  exclude-rules:
+    - path: _test\.go$
+      linters: # these linters are less important for tests
+        - gochecknoglobals
+        - gochecknoinits
