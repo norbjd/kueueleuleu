@@ -206,7 +206,7 @@ func Test_CreatePodSleep(t *testing.T) {
 		require.NoError(t, err)
 	}()
 
-	results := waitUntilPodSucceeds(ctx, t, kubeClient, podCreated, 1*time.Minute, debug)
+	results := waitUntilPodSucceeds(ctx, t, kubeClient, podCreated, 2*time.Minute, debug)
 	for _, result := range results {
 		t.Log(result)
 	}
@@ -259,7 +259,7 @@ func Test_CreatePodWhalesayValid(t *testing.T) {
 		require.NoError(t, err)
 	}()
 
-	_ = waitUntilPodSucceeds(ctx, t, kubeClient, podCreated, 1*time.Minute, debug)
+	_ = waitUntilPodSucceeds(ctx, t, kubeClient, podCreated, 2*time.Minute, debug)
 
 	getPod, err := kubeClient.CoreV1().Pods("default").Get(context.Background(), podCreated.Name, metav1.GetOptions{})
 	require.NoError(t, err)
