@@ -1,0 +1,36 @@
+name: e2e-tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        k8s-version:
+          - v1.26.x
+          - v1.27.x
+          - v1.28.x
+          - v1.29.x
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
+        with:
+          go-version: 1.21.x
+      - name: setup-kind
+        uses: chainguard-dev/actions/setup-kind@main
+        with:
+          k8s-version: ${{ matrix.k8s-version }}
+          kind-worker-count: 1
+      - name: tests
+        env:
+          DEBUG: 1
+        run: |
+          export KUBECONFIG=$(mktemp)-kubeconfig.yaml
+          kind export kubeconfig --kubeconfig $KUBECONFIG
+          go test ./... -race -count=1 -timeout=5m -tags=e2e

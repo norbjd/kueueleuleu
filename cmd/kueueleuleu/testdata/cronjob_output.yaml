@@ -1,0 +1,135 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  annotations:
+    norbjd.github.io/kueueleuleu: "true"
+  creationTimestamp: null
+  name: dummy
+spec:
+  jobTemplate:
+    metadata:
+      annotations:
+        norbjd.github.io/kueueleuleu: "true"
+      creationTimestamp: null
+    spec:
+      template:
+        metadata:
+          annotations:
+            norbjd.github.io/kueueleuleu: "true"
+          creationTimestamp: null
+        spec:
+          containers:
+          - args:
+            - -post_file
+            - /tekton/run/0/out
+            - -step_metadata_dir
+            - /tekton/run/0/status
+            - -entrypoint
+            - echo
+            - --
+            - step1
+            command:
+            - /tekton/bin/entrypoint
+            image: alpine
+            name: step1
+            resources: {}
+            volumeMounts:
+            - mountPath: /tekton/bin
+              name: tekton-internal-bin
+              readOnly: true
+            - mountPath: /tekton/run/0
+              name: tekton-internal-run-0
+            - mountPath: /tekton/run/1
+              name: tekton-internal-run-1
+              readOnly: true
+            - mountPath: /tekton/run/2
+              name: tekton-internal-run-2
+              readOnly: true
+          - args:
+            - -wait_file
+            - /tekton/run/0/out
+            - -post_file
+            - /tekton/run/1/out
+            - -step_metadata_dir
+            - /tekton/run/1/status
+            - -entrypoint
+            - echo
+            - --
+            - step2
+            command:
+            - /tekton/bin/entrypoint
+            image: alpine
+            name: step2
+            resources: {}
+            volumeMounts:
+            - mountPath: /tekton/bin
+              name: tekton-internal-bin
+              readOnly: true
+            - mountPath: /tekton/run/0
+              name: tekton-internal-run-0
+              readOnly: true
+            - mountPath: /tekton/run/1
+              name: tekton-internal-run-1
+            - mountPath: /tekton/run/2
+              name: tekton-internal-run-2
+              readOnly: true
+          - args:
+            - -wait_file
+            - /tekton/run/1/out
+            - -post_file
+            - /tekton/run/2/out
+            - -step_metadata_dir
+            - /tekton/run/2/status
+            - -entrypoint
+            - echo
+            - --
+            - step3
+            command:
+            - /tekton/bin/entrypoint
+            image: alpine
+            name: step3
+            resources: {}
+            volumeMounts:
+            - mountPath: /tekton/bin
+              name: tekton-internal-bin
+              readOnly: true
+            - mountPath: /tekton/run/0
+              name: tekton-internal-run-0
+              readOnly: true
+            - mountPath: /tekton/run/1
+              name: tekton-internal-run-1
+              readOnly: true
+            - mountPath: /tekton/run/2
+              name: tekton-internal-run-2
+          initContainers:
+          - command:
+            - /ko-app/entrypoint
+            - init
+            - /ko-app/entrypoint
+            - /tekton/bin/entrypoint
+            image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint@sha256:40abc3a78b558f251e890085972ed25fe7ad428f47998bc9c9c18f564dc03c32
+            name: kueueleuleu-prepare
+            resources: {}
+            volumeMounts:
+            - mountPath: /tekton/bin
+              name: tekton-internal-bin
+            - mountPath: /tekton/steps
+              name: tekton-internal-steps
+          - command:
+            - echo
+            - hello
+            image: alpine
+            name: prepare
+            resources: {}
+          restartPolicy: Never
+          volumes:
+          - emptyDir: {}
+            name: tekton-internal-steps
+          - emptyDir: {}
+            name: tekton-internal-bin
+          - name: tekton-internal-run-0
+          - name: tekton-internal-run-1
+          - name: tekton-internal-run-2
+  schedule: 0 0 * * *
+status: {}
