@@ -33,4 +33,4 @@ jobs:
         run: |
           export KUBECONFIG=$(mktemp)-kubeconfig.yaml
           kind export kubeconfig --kubeconfig $KUBECONFIG
-          go test ./... -v -race -count=1 -timeout=5m -tags=e2e
+          go test ./... -race -count=1 -timeout=5m -tags=e2e
