@@ -1,6 +1,6 @@
 # kueueleuleu
 
-Run containers inside `Pod`s, `Job`s, `CronJob`s sequentially.
+Run containers sequentially inside Kubernetes `Pod`s, `Job`s, `CronJob`s.
 
 The name `kueueleuleu` (\kø lø.lø\) comes from the French [`queue leu-leu`](https://fr.wiktionary.org/wiki/%C3%A0_la_queue_leu-leu), meaning "one after the other" or "[in a single file](https://youtu.be/eIRbCW3vH-Y?t=106)". The initial `k` is obviously for `kubernetes`.
 
