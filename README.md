@@ -59,7 +59,7 @@ This library requires Go >= 1.21.
 ### Using the CLI
 
 ```shell
-go install github.com/norbjd/kueueleuleu/cmd/kueueleuleu@latest
+go install github.com/norbjd/kueueleuleu/cmd/kueueleuleu@main
 
 # create a simple pod with two containers: by default, both will run at the same time
 cat > simplepod.yaml <<'EOF'
@@ -118,7 +118,7 @@ Conversion also work with `Job`s and `CronJob`s, and even with YAML files contai
 
 ### Using the library
 
-First, run `go get github.com/norbjd/kueueleuleu@latest` to download the dependency.
+First, run `go get github.com/norbjd/kueueleuleu@main` to download the dependency.
 
 ```go
 package main
