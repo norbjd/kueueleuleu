@@ -57,7 +57,7 @@ Unlike the known solutions mentioned above, this simple library aims to:
 ### Using the CLI
 
 ```shell
-go build -o kueueleuleu cmd/main.go
+go install github.com/norbjd/kueueleuleu/cmd/kueueleuleu@latest
 
 # create a simple pod with two containers: by default, both will run at the same time
 cat > simplepod.yaml <<'EOF'
@@ -86,7 +86,8 @@ EOF
 
 # convert this pod to run containers sequentially and apply
 # if you like chaining commands, this is similar to: cat simplepod.yaml | ./kueueleuleu -f - | kubectl apply -f -
-./kueueleuleu -f simplepod.yaml | kubectl apply -f -
+# if kueueleuleu is not in your PATH, replace with $GOPATH/bin/kueueleuleu (default when running go install)
+kueueleuleu -f simplepod.yaml | kubectl apply -f -
 ```
 
 Once the pod is finished, check the logs (`kubectl logs two-steps-pod --all-containers --timestamps | sort`) to see containers have been executed sequentially (first, `step1`, and then `step2`):
@@ -114,6 +115,8 @@ Without `kueueleuleu` (`kubectl apply -f simplepod.yaml`), containers logs are i
 Conversion also work with `Job`s and `CronJob`s, and even with YAML files containing multiple resources (see `cmd/testdata/*_input.yaml` for examples, and `cmd/testdata/*_output.yaml` for results after using `kueueleuleu`).
 
 ### Using the library
+
+First, run `go get github.com/norbjd/kueueleuleu@latest` to download the dependency.
 
 ```go
 package main
