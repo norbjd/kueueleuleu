@@ -269,7 +269,8 @@ func Test_CreatePodWhalesayValid(t *testing.T) {
 	firstContainer := getPod.Status.ContainerStatuses[0]
 	secondContainer := getPod.Status.ContainerStatuses[1]
 
-	assert.Less(t, firstContainer.State.Terminated.FinishedAt.Format(time.RFC3339Nano),
+	// sometimes, both finish at the same second because we don't have sub-second granularity, hence the LessOrEqual
+	assert.LessOrEqual(t, firstContainer.State.Terminated.FinishedAt.Format(time.RFC3339Nano),
 		secondContainer.State.Terminated.FinishedAt.Format(time.RFC3339Nano))
 
 	logsReq := kubeClient.CoreV1().Pods("default").GetLogs(podCreated.Name, &corev1.PodLogOptions{
