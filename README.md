@@ -54,6 +54,8 @@ Unlike the known solutions mentioned above, this simple library aims to:
 
 ## How to use?
 
+This library requires Go >= 1.21.
+
 ### Using the CLI
 
 ```shell
