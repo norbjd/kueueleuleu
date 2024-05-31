@@ -1,0 +1,48 @@
+name: SLSA go releaser
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  args:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.ldflags.outputs.version }}
+      commit: ${{ steps.ldflags.outputs.commit }}
+      commit-date: ${{ steps.ldflags.outputs.commit-date }}
+      tree-state: ${{ steps.ldflags.outputs.tree-state }}
+    steps:
+      - id: checkout
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # tag=v4.1.6
+        with:
+          fetch-depth: 0
+      - id: ldflags
+        run: |
+          echo "version=$(git describe --tags --always --dirty | cut -c2-)" >> "$GITHUB_OUTPUT"
+          echo "commit=$GITHUB_SHA" >> "$GITHUB_OUTPUT"
+          echo "commit-date=$(git log --date=iso8601-strict -1 --pretty=%cI)" >> "$GITHUB_OUTPUT"
+          echo "tree-state=$(if git diff --quiet; then echo "clean"; else echo "dirty"; fi)" >> "$GITHUB_OUTPUT"
+
+  build:
+    permissions:
+      id-token: write # to sign the provenance
+      contents: write # to upload assets to release
+      actions: read # to read the workflow path
+    strategy:
+      matrix:
+        os:
+          - linux
+          - darwin
+        arch:
+          - amd64
+          - arm64
+        exclude:
+          - os: linux
+            arch: arm64
+    needs: args
+    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_go_slsa3.yml@v2.0.0 # cannot reference by digest, see: https://github.com/slsa-framework/slsa-github-generator/blob/v2.0.0/README.md#referencing-slsa-builders-and-generators
+    with:
+      go-version: 1.21
+      config-file: .github/workflows/.slsa-goreleaser/${{matrix.os}}-${{matrix.arch}}.yaml
+      evaluated-envs: "VERSION:${{needs.args.outputs.version}}, COMMIT:${{needs.args.outputs.commit}}, COMMIT_DATE:${{needs.args.outputs.commit-date}}, TREE_STATE:${{needs.args.outputs.tree-state}}"

@@ -1,0 +1,20 @@
+version: 1
+
+env:
+  - CGO_ENABLED=0
+
+flags:
+  - -trimpath
+
+goos: darwin
+goarch: arm64
+
+main: ./cmd/kueueleuleu/main.go
+
+binary: kueueleuleu-{{ .Os }}-{{ .Arch }}
+
+ldflags:
+  - "-X main.version={{ .Env.VERSION }}"
+  - "-X main.commit={{ .Env.COMMIT }}"
+  - "-X main.commitDate={{ .Env.COMMIT_DATE }}"
+  - "-X main.treeState={{ .Env.TREE_STATE }}"
