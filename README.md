@@ -84,16 +84,16 @@ VERSION=v0.1.0
 OS=linux # or darwin
 ARCH=amd64 # or arm64
 
-curl -Lo kueuleuleu "https://github.com/norbjd/kueueleuleu/releases/download/$VERSION/kueueleuleu-$OS-$ARCH"
-chmod u+x kueuleuleu
+curl -Lo kueueleuleu "https://github.com/norbjd/kueueleuleu/releases/download/$VERSION/kueueleuleu-$OS-$ARCH"
+chmod u+x kueueleuleu
 
 # optional: verify the provenance with slsa-verifier (https://github.com/slsa-framework/slsa-verifier)
 # this ensures authenticity and trustworthiness of the binary
 curl -Lo kueueleuleu.intoto.jsonl "https://github.com/norbjd/kueueleuleu/releases/download/$VERSION/kueueleuleu-$OS-$ARCH.intoto.jsonl"
 
 # should display "PASSED: Verified SLSA provenance"
-slsa-verifier verify-artifact kueuleuleu \
-  --provenance-path kueuleuleu.intoto.jsonl \
+slsa-verifier verify-artifact kueueleuleu \
+  --provenance-path kueueleuleu.intoto.jsonl \
   --source-uri github.com/norbjd/kueueleuleu \
   --source-tag $VERSION
 ```
