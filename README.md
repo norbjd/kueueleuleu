@@ -54,13 +54,55 @@ Unlike the known solutions mentioned above, this simple library aims to:
 
 ## How to use?
 
-This library requires Go >= 1.21.
+There are two ways to use `kueueleuleu`:
+
+- using the CLI
+- using the Go library
 
 ### Using the CLI
 
-```shell
-go install github.com/norbjd/kueueleuleu/cmd/kueueleuleu@main
+#### Install the CLI
 
+##### With `go install`
+
+> [!WARNING]  
+> This requires Go >= 1.21.
+
+```shell
+VERSION=v0.1.0
+go install github.com/norbjd/kueueleuleu/cmd/kueueleuleu@$VERSION
+```
+
+The binary will be located in `$GOPATH/bin` by default.
+
+##### Download (and optionally verify) the binary
+
+```shell
+VERSION=v0.1.0
+
+# change accordingly to your OS/arch
+OS=linux # or darwin
+ARCH=amd64 # or arm64
+
+curl -Lo kueuleuleu "https://github.com/norbjd/kueueleuleu/releases/download/$VERSION/kueueleuleu-$OS-$ARCH"
+chmod u+x kueuleuleu
+
+# optional: verify the provenance with slsa-verifier (https://github.com/slsa-framework/slsa-verifier)
+# this ensures authenticity and trustworthiness of the binary
+curl -Lo kueueleuleu.intoto.jsonl "https://github.com/norbjd/kueueleuleu/releases/download/$VERSION/kueueleuleu-$OS-$ARCH.intoto.jsonl"
+
+# should display "PASSED: Verified SLSA provenance"
+slsa-verifier verify-artifact kueuleuleu \
+  --provenance-path kueuleuleu.intoto.jsonl \
+  --source-uri github.com/norbjd/kueueleuleu \
+  --source-tag $VERSION
+```
+
+Once downloaded and verified, you can move it to `/usr/local/bin` (or somewhere else in your `$PATH`).
+
+#### Use the CLI
+
+```shell
 # create a simple pod with two containers: by default, both will run at the same time
 cat > simplepod.yaml <<'EOF'
 apiVersion: v1
@@ -87,8 +129,8 @@ spec:
 EOF
 
 # convert this pod to run containers sequentially and apply
-# if you like chaining commands, this is similar to: cat simplepod.yaml | ./kueueleuleu -f - | kubectl apply -f -
-# if kueueleuleu is not in your PATH, replace with $GOPATH/bin/kueueleuleu (default when running go install)
+# if you like chaining commands, this is similar to: cat simplepod.yaml | kueueleuleu -f - | kubectl apply -f -
+# if kueueleuleu is not in your PATH, replace with /path/to/kueueleuleu
 kueueleuleu -f simplepod.yaml | kubectl apply -f -
 ```
 
@@ -118,7 +160,7 @@ Conversion also work with `Job`s and `CronJob`s, and even with YAML files contai
 
 ### Using the library
 
-First, run `go get github.com/norbjd/kueueleuleu@main` to download the dependency.
+First, run `go get github.com/norbjd/kueueleuleu` to download the dependency.
 
 ```go
 package main
