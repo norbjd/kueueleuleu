@@ -32,13 +32,14 @@ import (
 	kyaml "sigs.k8s.io/yaml"
 )
 
-
+// these variables are filled via ldflags when building: e.g. go build -ldflags="-X main.version=0.0.1" [...].
+//
+//nolint:gochecknoglobals
 var (
-	// filled via ldflags when building: e.g. go build -ldflags="-X main.version=0.0.1" [...].
-	version    = "unknown" // gochecknoglobals
-	commit     = "unknown" // gochecknoglobals
-	commitDate = "unknown" // gochecknoglobals
-	treeState  = "unknown" // gochecknoglobals
+	version    = "unknown"
+	commit     = "unknown"
+	commitDate = "unknown"
+	treeState  = "unknown"
 )
 
 var (
