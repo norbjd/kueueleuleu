@@ -4,6 +4,9 @@ on:
   push:
     tags:
       - "*"
+  pull_request:
+    branches:
+      - 'slsa-builder'
 
 jobs:
   args:
@@ -25,25 +28,25 @@ jobs:
           echo "commit-date=$(git log --date=iso8601-strict -1 --pretty=%ct)" >> "$GITHUB_OUTPUT"
           echo "tree-state=$(if git diff --quiet; then echo "clean"; else echo "dirty"; fi)" >> "$GITHUB_OUTPUT"
 
-  build:
-    permissions:
-      id-token: write # To sign the provenance.
-      contents: write # To upload assets to release.
-      actions: read # To read the workflow path.
-    strategy:
-      matrix:
-        os:
-          - linux
-          - darwin
-        arch:
-          - amd64
-          - arm64
-        exclude:
-          - os: linux
-            arch: arm64
-    needs: args
-    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_go_slsa3.yml@v2.0.0
-    with:
-      go-version: 1.21
-      config-file: .github/workflows/.slsa-goreleaser/${{matrix.os}}-${{matrix.arch}}.yaml
-      evaluated-envs: "VERSION:${{needs.args.outputs.version}}, COMMIT:${{needs.args.outputs.commit}}, COMMIT_DATE:${{needs.args.outputs.commit-date}}, TREE_STATE:${{needs.args.outputs.tree-state}}"
+#  build:
+#    permissions:
+#      id-token: write # To sign the provenance.
+#      contents: write # To upload assets to release.
+#      actions: read # To read the workflow path.
+#    strategy:
+#      matrix:
+#        os:
+#          - linux
+#          - darwin
+#        arch:
+#          - amd64
+#          - arm64
+#        exclude:
+#          - os: linux
+#            arch: arm64
+#    needs: args
+#    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_go_slsa3.yml@v2.0.0
+#    with:
+#      go-version: 1.21
+#      config-file: .github/workflows/.slsa-goreleaser/${{matrix.os}}-${{matrix.arch}}.yaml
+#      evaluated-envs: "VERSION:${{needs.args.outputs.version}}, COMMIT:${{needs.args.outputs.commit}}, COMMIT_DATE:${{needs.args.outputs.commit-date}}, TREE_STATE:${{needs.args.outputs.tree-state}}"
