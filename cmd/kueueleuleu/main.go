@@ -32,23 +32,28 @@ import (
 	kyaml "sigs.k8s.io/yaml"
 )
 
+// gochecknoglobals
 var (
-	// these variables are filled via ldflags when building
-	// e.g. go build -ldflags="-X main.version=0.0.1" [...]
+	// these variables are filled via ldflags when building,
+	// e.g. go build -ldflags="-X main.version=0.0.1" [...].
 	version    = "unknown"
 	commit     = "unknown"
 	commitDate = "unknown"
 	treeState  = "unknown"
+)
 
-	displayVersion bool
-	help           bool
-
+var (
 	errMalformedK8sObject    = errors.New("malformed k8s object")
 	errUnknownK8sObject      = errors.New("unknown k8s object")
 	errUnsupportedConversion = errors.New("unsupported conversion")
 )
 
 func main() {
+	var (
+		displayVersion bool
+		help           bool
+	)
+
 	flag.BoolVar(&displayVersion, "version", false, "output version information and exit")
 	flag.BoolVar(&help, "help", false, "display this help and exit")
 
@@ -60,7 +65,7 @@ func main() {
 	}
 
 	if displayVersion {
-		fmt.Printf(`kueueleuleu %s (commit: %s, date: %s, tree state: %s)
+		fmt.Fprintf(os.Stdout, `kueueleuleu %s (commit: %s, date: %s, tree state: %s)
 Copyright © 2023 norbjd
 License GPLv3: GNU GPL version 3 <https://gnu.org/licenses/gpl.html>
 This is free software: you are free to change and redistribute it.
@@ -79,10 +84,11 @@ There is NO WARRANTY.
 
 func displayUsageAndExit(exitCode int) {
 	flag.Usage()
-	fmt.Println(`
+	fmt.Fprintf(os.Stdout, `
 Report bugs to: <https://github.com/norbjd/kueueleuleu/issues>
-kueueleuleu home page: <https://github.com/norbjd/kueueleuleu>`)
-	os.Exit(0)
+kueueleuleu home page: <https://github.com/norbjd/kueueleuleu>
+`)
+	os.Exit(exitCode)
 }
 
 func convertYAML(inputFilename string, w io.Writer) {
