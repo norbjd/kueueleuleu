@@ -33,20 +33,56 @@ import (
 )
 
 var (
+	// these variables are filled via ldflags when building
+	// e.g. go build -ldflags="-X main.version=0.0.1" [...]
+	version    = "unknown"
+	commit     = "unknown"
+	commitDate = "unknown"
+	treeState  = "unknown"
+
+	displayVersion bool
+	help           bool
+
 	errMalformedK8sObject    = errors.New("malformed k8s object")
 	errUnknownK8sObject      = errors.New("unknown k8s object")
 	errUnsupportedConversion = errors.New("unsupported conversion")
 )
 
 func main() {
+	flag.BoolVar(&displayVersion, "version", false, "output version information and exit")
+	flag.BoolVar(&help, "help", false, "display this help and exit")
+
 	file := flag.String("f", "", "path to YAML file or - (stdin)")
 	flag.Parse()
 
+	if help {
+		displayUsageAndExit(0)
+	}
+
+	if displayVersion {
+		fmt.Printf(`kueueleuleu %s (commit: %s, date: %s, tree state: %s)
+Copyright © 2023 norbjd
+License GPLv3: GNU GPL version 3 <https://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY.
+`, version, commit, commitDate, treeState)
+		os.Exit(0)
+	}
+
 	if file == nil || *file == "" {
-		log.Fatal("input is not set")
+		log.Println("input is not set")
+		displayUsageAndExit(1)
 	}
 
 	convertYAML(*file, os.Stdout)
+}
+
+func displayUsageAndExit(exitCode int) {
+	flag.Usage()
+	fmt.Println(`
+Report bugs to: <https://github.com/norbjd/kueueleuleu/issues>
+kueueleuleu home page: <https://github.com/norbjd/kueueleuleu>`)
+	os.Exit(0)
 }
 
 func convertYAML(inputFilename string, w io.Writer) {
