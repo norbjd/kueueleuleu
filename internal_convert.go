@@ -27,8 +27,7 @@ import (
 
 const (
 	prepareInitContainerName = "kueueleuleu-prepare"
-	tektonEntrypointImage    = "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint" +
-		"@sha256:40abc3a78b558f251e890085972ed25fe7ad428f47998bc9c9c18f564dc03c32"
+	tektonEntrypointImage    = "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint@v1.3.1"
 
 	kueueleuleuAnnotationKey   = "norbjd.github.io/kueueleuleu"
 	kueueleuleuAnnotationValue = "true"
