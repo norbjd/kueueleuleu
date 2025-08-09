@@ -13,10 +13,8 @@ jobs:
       fail-fast: false
       matrix:
         k8s-version:
-          - v1.26.x
-          - v1.27.x
-          - v1.28.x
-          - v1.29.x
+          - v1.32.x
+          - v1.33.x
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v4
