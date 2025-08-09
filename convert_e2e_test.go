@@ -74,13 +74,13 @@ var podSpecWhalesayValid = corev1.PodSpec{
 	Containers: []corev1.Container{
 		{
 			Name:    "say-hello",
-			Image:   "docker/whalesay",
+			Image:   "docker/whalesay:latest",
 			Command: []string{"cowsay"},
 			Args:    []string{"hello"},
 		},
 		{
 			Name:    "say-nothing",
-			Image:   "docker/whalesay",
+			Image:   "docker/whalesay:latest",
 			Command: []string{"cowsay"},
 		},
 	},
@@ -91,7 +91,7 @@ var podSpecWhalesayInvalid = corev1.PodSpec{
 	Containers: []corev1.Container{
 		{
 			Name:    "say-hello",
-			Image:   "docker/whalesay",
+			Image:   "docker/whalesay:latest",
 			Command: []string{"cowsay"},
 			Args:    []string{"hello"},
 		},
