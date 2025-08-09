@@ -162,7 +162,7 @@ func Test_ConvertPod(t *testing.T) {
 	assert.True(t, kueueleuleu.IsKueueleuleu(kueueleuleuPod.ObjectMeta))
 
 	// Verify resources requests and limits; see https://github.com/norbjd/kueueleuleu/issues/8.
-	require.Len(t, kueueleuleuPod.Spec.Containers, 2)
+	require.Len(t, kueueleuleuPod.Spec.Containers, 3)
 	assert.Equal(t, resource.MustParse("200m"), kueueleuleuPod.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU])
 	assert.Equal(t, resource.MustParse("100M"), kueueleuleuPod.Spec.Containers[0].Resources.Requests[corev1.ResourceMemory])
 	assert.Equal(t, resource.MustParse("200m"), kueueleuleuPod.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU])
