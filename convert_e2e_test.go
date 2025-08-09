@@ -97,7 +97,7 @@ var podSpecWhalesayInvalid = corev1.PodSpec{
 		},
 		{
 			Name:  "say-goodbye",
-			Image: "docker/whalesay",
+			Image: "docker/whalesay:latest",
 			// here, Command is not set, so kueueleuleu should return an error
 			Args: []string{"goodbye"},
 		},
