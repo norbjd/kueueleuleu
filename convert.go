@@ -18,7 +18,7 @@ package kueueleuleu
 
 import (
 	"bytes"
-	"encoding/gob"
+	"encoding/json"
 	"errors"
 	"fmt"
 
@@ -86,11 +86,11 @@ var errInternal = errors.New("internal error")
 func deepCopy(src, dist any) error {
 	buf := bytes.Buffer{}
 
-	if err := gob.NewEncoder(&buf).Encode(src); err != nil {
+	if err := json.NewEncoder(&buf).Encode(src); err != nil {
 		return fmt.Errorf("%w: can't deep copy: %s", errInternal, err.Error())
 	}
 
-	if err := gob.NewDecoder(&buf).Decode(dist); err != nil {
+	if err := json.NewDecoder(&buf).Decode(dist); err != nil {
 		return fmt.Errorf("%w: can't deep copy: %s", errInternal, err.Error())
 	}
 
