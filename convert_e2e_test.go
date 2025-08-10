@@ -70,34 +70,34 @@ var podSpecSleep = corev1.PodSpec{
 	RestartPolicy: "Never",
 }
 
-var podSpecWhalesayValid = corev1.PodSpec{
+var podSpecCowsayValid = corev1.PodSpec{
 	Containers: []corev1.Container{
 		{
 			Name:    "say-hello",
-			Image:   "docker/whalesay:latest",
+			Image:   "rancher/cowsay:latest",
 			Command: []string{"cowsay"},
 			Args:    []string{"hello"},
 		},
 		{
 			Name:    "say-nothing",
-			Image:   "docker/whalesay:latest",
+			Image:   "rancher/cowsay:latest",
 			Command: []string{"cowsay"},
 		},
 	},
 	RestartPolicy: "Never",
 }
 
-var podSpecWhalesayInvalid = corev1.PodSpec{
+var podSpecCowsayInvalid = corev1.PodSpec{
 	Containers: []corev1.Container{
 		{
 			Name:    "say-hello",
-			Image:   "docker/whalesay:latest",
+			Image:   "rancher/cowsay:latest",
 			Command: []string{"cowsay"},
 			Args:    []string{"hello"},
 		},
 		{
 			Name:  "say-goodbye",
-			Image: "docker/whalesay:latest",
+			Image: "rancher/cowsay:latest",
 			// here, Command is not set, so kueueleuleu should return an error
 			Args: []string{"goodbye"},
 		},
@@ -105,20 +105,14 @@ var podSpecWhalesayInvalid = corev1.PodSpec{
 	RestartPolicy: "Never",
 }
 
-var whalesay = ` _ 
+var cowsay = ` _______
 <   >
- - 
-    \
-     \
-      \     
-                    ##        .            
-              ## ## ##       ==            
-           ## ## ## ##      ===            
-       /""""""""""""""""___/ ===        
-  ~~~ {~~ ~~~~ ~~~ ~~~~ ~~ ~ /  ===- ~~~   
-       \______ o          __/            
-        \    \        __/             
-          \____\______/   
+ -------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||  
 `
 
 var debug bool
@@ -246,14 +240,14 @@ func Test_CreatePodSleep(t *testing.T) {
 	assert.GreaterOrEqual(t, step3Sleep20Duration, 20*time.Second)
 }
 
-func Test_CreatePodWhalesayValid(t *testing.T) {
+func Test_CreatePodCowsayValid(t *testing.T) {
 	t.Parallel()
 
 	pod := corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: fmt.Sprintf("whalesay-%s", uuid.NewUUID()),
+			Name: fmt.Sprintf("cowsay-%s", uuid.NewUUID()),
 		},
-		Spec: podSpecWhalesayValid,
+		Spec: podSpecCowsayValid,
 	}
 
 	kueueleuleuPod, err := kueueleuleu.ConvertPod(pod)
@@ -299,17 +293,17 @@ func Test_CreatePodWhalesayValid(t *testing.T) {
 	logs, err := io.ReadAll(podLogs)
 	require.NoError(t, err)
 
-	assert.Equal(t, whalesay, string(logs))
+	assert.Equal(t, cowsay, string(logs))
 }
 
-func Test_CreatePodWhalesayInvalid(t *testing.T) {
+func Test_CreatePodCowsayInvalid(t *testing.T) {
 	t.Parallel()
 
 	pod := corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: fmt.Sprintf("whalesay-%s", uuid.NewUUID()),
+			Name: fmt.Sprintf("cowsay-%s", uuid.NewUUID()),
 		},
-		Spec: podSpecWhalesayInvalid,
+		Spec: podSpecCowsayInvalid,
 	}
 
 	_, err := kueueleuleu.ConvertPod(pod)
