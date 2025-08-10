@@ -69,7 +69,7 @@ There are two ways to use `kueueleuleu`:
 > This requires Go >= 1.21.
 
 ```shell
-VERSION=v0.1.0
+VERSION=v0.1.1
 go install github.com/norbjd/kueueleuleu/cmd/kueueleuleu@$VERSION
 ```
 
@@ -78,7 +78,7 @@ The binary will be located in `$GOPATH/bin` by default.
 ##### Download (and optionally verify) the binary
 
 ```shell
-VERSION=v0.1.0
+VERSION=v0.1.1
 
 # change accordingly to your OS/arch
 OS=linux # or darwin
