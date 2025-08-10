@@ -105,14 +105,14 @@ var podSpecCowsayInvalid = corev1.PodSpec{
 	RestartPolicy: "Never",
 }
 
-var cowsay = ` _______
+var cowsay = ` _
 <   >
- -------
+ -
         \   ^__^
          \  (oo)\_______
             (__)\       )\/\
                 ||----w |
-                ||     ||  
+                ||     ||
 `
 
 var debug bool
